@@ -63,9 +63,6 @@ export const useNodeCreation = (nodeService, edgeService, setNodes, setEdges) =>
             }
           }
   
-          console.log("New EDGE");
-          console.log(newEdge);
-  
           setEdges((prevEdges) => [...prevEdges, newEdge]);
   
         });

@@ -21,6 +21,18 @@ class GraphEditorWebComponent extends HTMLElement {
 
     client = "graph-editor-user-agent";
 
+    nodeObjectName = 'questions';
+    nodeTitle = 'title';
+    nodeText = 'question';
+    xPosition = 'xPosition';
+    yPosition = 'yPosition';
+
+    edgeObjectName = 'options';
+    sourceRelationId = 'r_questionOption_c_questionId';
+    targetRelationId = 'r_optionNextQuestion_c_questionId';
+    edgeLabel = 'optionText';
+
+
     constructor() {
         super();
         if (!this.shadowRoot) {
@@ -51,8 +63,8 @@ class GraphEditorWebComponent extends HTMLElement {
             <ReactFlowProvider>  
                 <GraphEditor
                     parentStyles={parentStyles} 
-                    nodeService={new NodeService(this.authString, this.client)}
-                    edgeService={new EdgeService(this.authString, this.client)}
+                    nodeService={new NodeService(this.authString, this.client, this.nodeObjectName, this.nodeTitle, this.nodeText, this.xPosition, this.yPosition)}
+                    edgeService={new EdgeService(this.authString, this.client, this.edgeObjectName, this.sourceRelationId, this.targetRelationId, this.edgeLabel)}
                 />
             </ReactFlowProvider>,
             this.shadowRoot

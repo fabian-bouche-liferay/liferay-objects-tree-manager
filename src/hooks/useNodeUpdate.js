@@ -31,8 +31,8 @@ export const useNodeUpdate = (nodeService, nodes, setNodes) => {
                     ...node, 
                     data: { 
                         ...node.data,  // Keep other properties in data intact
-                        title: nodeTitle, 
-                        text: nodeText 
+                        nodeTitle: nodeTitle, 
+                        nodeText: nodeText 
                     }
                 };
               }

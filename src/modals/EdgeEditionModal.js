@@ -17,7 +17,6 @@ function EdgeEditionModal(props) {
   }, [props]);
 
   const handleEdgeLabelChange = function(event) {
-    console.log("Handle Edge Label Change: " + event.target.value);
     setEdgeLabel(event.target.value);
   }
   

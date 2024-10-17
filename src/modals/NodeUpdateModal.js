@@ -19,12 +19,10 @@ function NodeUpdateModal(props) {
   }, [props]);
 
   const handleNodeTitleChange = function(event) {
-    console.log("Handle Node Title Change: " + event.target.value);
     setNodeTitle(event.target.value);
   }
 
   const handleNodeTextChange = function(event) {
-    console.log("Handle Node Text Change: " + event.target.value);
     setNodeText(event.target.value);
   }
 
@@ -36,23 +34,23 @@ function NodeUpdateModal(props) {
           size="lg"
           status="info"
         >
-          <ClayModal.Header>Update Node</ClayModal.Header>
+          <ClayModal.Header>Update a Node</ClayModal.Header>
           <ClayModal.Body>
             <ClayForm.Group>
-              <label htmlFor="nodeTitle">New question Title</label>
+              <label htmlFor="nodeTitle">Node Title</label>
               <ClayInput
                 id="nodeTitle"
-                placeholder="Insert title here"
+                placeholder="Insert a title for the Node here"
                 value={nodeTitle}
                 onChange={handleNodeTitleChange}
                 type="text"
               />
             </ClayForm.Group>        
             <ClayForm.Group>
-              <label htmlFor="nodeText">New question Text</label>
+              <label htmlFor="nodeText">Node Text</label>
               <ClayInput
                 id="nodeText"
-                placeholder="Insert text here"
+                placeholder="Insert a text for the Node"
                 value={nodeText}
                 component="textarea"
                 onChange={handleNodeTextChange}

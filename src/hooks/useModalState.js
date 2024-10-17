@@ -77,9 +77,6 @@ export const useModalState = (nodeService, edgeService, nodes, setNodes, edges, 
               }
             }
     
-            console.log("New EDGE");
-            console.log(newEdge);
-    
             setEdges((prevEdges) => [...prevEdges, newEdge]);
     
           });

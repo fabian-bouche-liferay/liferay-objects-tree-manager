@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     ReactFlow,
     MiniMap,
@@ -8,6 +8,7 @@ import {
     useReactFlow,
   } from '@xyflow/react';
 
+import ClayButton from '@clayui/button';
 import CustomNode from './flow-customization/CustomNode';
 import { useNodeCreation } from './hooks/useNodeCreation';
 import { useNodeUpdate } from './hooks/useNodeUpdate';
@@ -33,7 +34,6 @@ function GraphEditor(props) {
 
     const onLayout = useCallback(
       (direction) => {
-        console.log(nodes);
         const layouted = getLayoutedElements(nodes, edges, { direction }, props.nodeService);
   
         setNodes([...layouted.nodes]);
@@ -45,6 +45,10 @@ function GraphEditor(props) {
       },
       [nodes, edges],
     );
+
+    useEffect(() => {
+      loadGraphData();
+    }, [props]);
     
     return (
         <div>
@@ -69,8 +73,20 @@ function GraphEditor(props) {
                     <MiniMap />
                     <Background variant="dots" gap={12} size={1} />
                     <Panel position="top-right">
-                      <button onClick={() => loadGraphData()}>load data</button>
-                      <button onClick={() => onLayout('TB')}>vertical layout</button>
+                      <ClayButton.Group spaced>
+                        <ClayButton
+                          displayType="secondary"
+                          onClick={() => loadGraphData()}
+                        >
+                          Refresh Data
+                        </ClayButton>
+                        <ClayButton 
+                          displayType="secondary"
+                          onClick={() => onLayout('TB')}
+                        >
+                          Auto Layout
+                        </ClayButton>
+                      </ClayButton.Group>                      
                     </Panel>
                   </ReactFlow>
               </div>

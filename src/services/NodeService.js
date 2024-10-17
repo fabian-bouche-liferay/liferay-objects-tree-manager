@@ -2,15 +2,14 @@ import ApiService from './ApiService';
 
 class NodeService {
 
-    nodeObjectName = 'questions';
-    nodeTitle = 'title';
-    nodeText = 'question';
-    xPosition = 'xPosition';
-    yPosition = 'yPosition';
-
-    constructor(authString, client) {
+    constructor(authString, client, nodeObjectName, nodeTitle, nodeText, xPosition, yPosition) {
         this.authString = authString;
         this.client = client;
+        this.nodeObjectName = nodeObjectName;
+        this.nodeTitle = nodeTitle;
+        this.nodeText = nodeText;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
     }
 
     getNodes() {

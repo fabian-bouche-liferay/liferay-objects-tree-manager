@@ -2,14 +2,13 @@ import ApiService from './ApiService';
 
 class EdgeService {
 
-    edgeObjectName = 'options';
-    sourceRelationId = 'r_questionOption_c_questionId';
-    targetRelationId = 'r_optionNextQuestion_c_questionId';
-    edgeLabel = 'optionText';
-
-    constructor(authString, client) {
+    constructor(authString, client, edgeObjectName, sourceRelationId, targetRelationId, edgeLabel) {
         this.authString = authString;
         this.client = client;
+        this.edgeLabel = edgeLabel;
+        this.edgeObjectName = edgeObjectName;
+        this.sourceRelationId = sourceRelationId;
+        this.targetRelationId = targetRelationId;
     }
 
     getEdges() {
@@ -48,9 +47,6 @@ class EdgeService {
             [this.targetRelationId]: targetNodeId,
             [this.sourceRelationId]: sourceNodeId
         };
-
-        console.log("EDGE CREATION")
-        console.log(body);
 
         return ApiService.makeCall("http://localhost:8080/o/c/" + this.edgeObjectName + "/", this.authString, this.client, "POST", body).then(data => {
             return {

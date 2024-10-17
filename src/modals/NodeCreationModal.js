@@ -15,17 +15,14 @@ function NodeCreationModal(props) {
   const [nodeText, setNodeText] = useState('');
 
   const handleEdgeLabelChange = function(event) {
-    console.log("Handle Edge Label Change: " + event.target.value);
     setEdgeLabel(event.target.value);
   }
   
   const handleNodeTitleChange = function(event) {
-    console.log("Handle Node Title Change: " + event.target.value);
     setNodeTitle(event.target.value);
   }
 
   const handleNodeTextChange = function(event) {
-    console.log("Handle Node Text Change: " + event.target.value);
     setNodeText(event.target.value);
   }
 
@@ -37,33 +34,33 @@ function NodeCreationModal(props) {
           size="lg"
           status="info"
         >
-          <ClayModal.Header>Create new Node</ClayModal.Header>
+          <ClayModal.Header>Create a new Node</ClayModal.Header>
           <ClayModal.Body>
             <ClayForm.Group>
-              <label htmlFor="edgeLabel">Transition Label</label>
+              <label htmlFor="edgeLabel">Edge Label</label>
               <ClayInput
                 id="edgeLabel"
-                placeholder="Insert label here"
+                placeholder="Select a label for the Edge to the new Node"
                 value={edgeLabel}
                 onChange={handleEdgeLabelChange}
                 type="text"
               />
             </ClayForm.Group>
             <ClayForm.Group>
-              <label htmlFor="nodeTitle">New question Title</label>
+              <label htmlFor="nodeTitle">New Node Title</label>
               <ClayInput
                 id="nodeTitle"
-                placeholder="Insert title here"
+                placeholder="Insert a title for the new Node here"
                 value={nodeTitle}
                 onChange={handleNodeTitleChange}
                 type="text"
               />
             </ClayForm.Group>        
             <ClayForm.Group>
-              <label htmlFor="nodeText">New question Text</label>
+              <label htmlFor="nodeText">New Node Text</label>
               <ClayInput
                 id="nodeText"
-                placeholder="Insert text here"
+                placeholder="Insert a text for the new Node"
                 value={nodeText}
                 component="textarea"
                 onChange={handleNodeTextChange}

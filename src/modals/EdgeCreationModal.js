@@ -13,7 +13,6 @@ function EdgeCreationModal(props) {
   const [edgeLabel, setEdgeLabel] = useState('');
 
   const handleEdgeLabelChange = function(event) {
-    console.log("Handle Edge Label Change: " + event.target.value);
     setEdgeLabel(event.target.value);
   }
   
@@ -25,13 +24,13 @@ function EdgeCreationModal(props) {
           size="lg"
           status="info"
         >
-          <ClayModal.Header>Update Edge Label</ClayModal.Header>
+          <ClayModal.Header>Create a new Edge</ClayModal.Header>
           <ClayModal.Body>
             <ClayForm.Group>
               <label htmlFor="nodeLabel">Label</label>
               <ClayInput
                 id="nodeLabel"
-                placeholder="Insert label here"
+                placeholder="Choose a label for the Edge"
                 onChange={handleEdgeLabelChange}
                 type="text"
               />
