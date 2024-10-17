@@ -4,7 +4,7 @@ import {
 } from '@xyflow/react';
 
 
-export const useEdgeCreation = (edgeService, setEdges) => {
+export const useEdgeCreation = (edgeService, setEdges, treeId) => {
 
   const [edgeCreationModalOpen, setEdgeCreationModalOpen] = useState(false);
   const [params, setParams] = useState(null);
@@ -25,7 +25,7 @@ export const useEdgeCreation = (edgeService, setEdges) => {
 
     params.label = edgeLabel;
     setEdges((eds) => addEdge(params, eds));
-    edgeService.createEdge(params.source, params.target, edgeLabel);
+    edgeService.createEdge(treeId, params.source, params.target, edgeLabel);
 
   }
   

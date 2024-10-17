@@ -5,7 +5,7 @@ import {
 } from '@xyflow/react';
 
 
-export const useNodeCreation = (nodeService, edgeService, setNodes, setEdges) => {
+export const useNodeCreation = (nodeService, edgeService, setNodes, setEdges, treeId) => {
 
     const [nodeCreationModalOpen, setNodeCreationModalOpen] = useState(false); // For popover position
     const [currentNode, setCurrentNode] = useState(null); // To track clicked edge
@@ -32,7 +32,7 @@ export const useNodeCreation = (nodeService, edgeService, setNodes, setEdges) =>
     }
     
     const handleNodeCreation = (edgeLabel, nodeTitle, nodeText) => {
-      nodeService.createNode(nodeTitle, nodeText, xPosition, yPosition).then(newNodeData => {
+      nodeService.createNode(treeId, nodeTitle, nodeText, xPosition, yPosition).then(newNodeData => {
     
         const newNode = {
           id: '' + newNodeData.id,
@@ -51,7 +51,7 @@ export const useNodeCreation = (nodeService, edgeService, setNodes, setEdges) =>
     
         setNodes((prevNodes) => [...prevNodes, newNode]);
   
-        edgeService.createEdge(currentNode.id, newNode.id, edgeLabel).then(newEdgeData => {
+        edgeService.createEdge(treeId, currentNode.id, newNode.id, edgeLabel).then(newEdgeData => {
   
           const newEdge = {
             id: '' + newEdgeData.id,

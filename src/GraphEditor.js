@@ -10,27 +10,35 @@ import {
 
 import ClayButton from '@clayui/button';
 import CustomNode from './flow-customization/CustomNode';
+import { useTreeSelection } from './hooks/useTreeSelection';
 import { useNodeCreation } from './hooks/useNodeCreation';
 import { useNodeUpdate } from './hooks/useNodeUpdate';
 import { useEdgeCreation } from './hooks/useEdgeCreation';
 import { useEdgeUpdate } from './hooks/useEdgeUpdate';
+import { useTreeData } from './hooks/useTreeData';
 import { useGraphData } from './hooks/useGraphData';
 import { getLayoutedElements } from './utils/layoutUtils';
+import LoadingModal from './modals/LoadingModal';
 import EdgeCreationModal from './modals/EdgeCreationModal';
 import EdgeEditionModal from './modals/EdgeEditionModal';
 import NodeCreationModal from './modals/NodeCreationModal';
 import NodeUpdateModal from './modals/NodeUpdateModal';
+import TreeSelectionModal from './modals/TreeSelectionModal';
 
 const nodeTypes = { custom: CustomNode };
 
 function GraphEditor(props) {
 
     const { fitView } = useReactFlow();
+    const [ loading, setLoading ] = useState(false);
+    const [ treeId, setTreeId ] = useState();
+    const { trees, loadTreeData } = useTreeData(props.treeService);
     const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, loadGraphData } = useGraphData(props.nodeService, props.edgeService, fitView);
-    const { onConnect, handleEdgeCreationModalClose, handleEdgeCreation, edgeCreationModalOpen } = useEdgeCreation(props.edgeService, setEdges);
-    const { onConnectEnd, handleNodeCreationModalClose, handleNodeCreation, nodeCreationModalOpen } = useNodeCreation(props.nodeService, props.edgeService, setNodes, setEdges);
+    const { onConnect, handleEdgeCreationModalClose, handleEdgeCreation, edgeCreationModalOpen } = useEdgeCreation(props.edgeService, setEdges, treeId);
+    const { onConnectEnd, handleNodeCreationModalClose, handleNodeCreation, nodeCreationModalOpen } = useNodeCreation(props.nodeService, props.edgeService, setNodes, setEdges, treeId);
     const { onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, nodeUpdateModalOpen, currentNode } = useNodeUpdate(props.nodeService, nodes, setNodes);
-    const { onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, currentEdge } = useEdgeUpdate(props.edgeService, edges, setEdges)
+    const { onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, currentEdge } = useEdgeUpdate(props.edgeService, edges, setEdges);
+    const { onSelectTree, handleTreeSelectionModalClose, handleTreeSelection, treeSelectionModalOpen } = useTreeSelection(setTreeId);
 
     const onLayout = useCallback(
       (direction) => {
@@ -47,67 +55,102 @@ function GraphEditor(props) {
     );
 
     useEffect(() => {
-      loadGraphData();
+      loadTreeData(props.treeService);
+      if(props.treeId != null) {
+        setTreeId(props.treeId);
+      }
     }, [props]);
+
+    useEffect(() => {
+      if(treeId != null) {
+        loadGraphData(treeId, setLoading);
+      }
+    }, [treeId]);
     
     return (
         <div>
             <style>
                 {props.parentStyles}
             </style>
+
             <div className="container">
-                <div style={{ width: '100%', height: '800px' }}>
-                  <ReactFlow 
-                      nodes={nodes}
-                      edges={edges}
-                      onNodeClick={onNodeClick}
-                      onConnect={onConnect}
-                      onConnectEnd={onConnectEnd}
-                      onNodeDragStop={onNodeDragStop}
-                      onEdgeClick={onEdgeClick}
-                      nodesDraggable={true}
-                      onNodesChange={onNodesChange}
-                      onEdgesChange={onEdgesChange}                     
-                      nodeTypes={nodeTypes}>
-                    <Controls />
-                    <MiniMap />
-                    <Background variant="dots" gap={12} size={1} />
-                    <Panel position="top-right">
-                      <ClayButton.Group spaced>
-                        <ClayButton
-                          displayType="secondary"
-                          onClick={() => loadGraphData()}
-                        >
-                          Refresh Data
-                        </ClayButton>
-                        <ClayButton 
-                          displayType="secondary"
-                          onClick={() => onLayout('TB')}
-                        >
-                          Auto Layout
-                        </ClayButton>
-                      </ClayButton.Group>                      
-                    </Panel>
-                  </ReactFlow>
+              <div style={{ width: '100%', height: '800px' }}>
+
+                <ReactFlow 
+                    nodes={nodes}
+                    edges={edges}
+                    onNodeClick={onNodeClick}
+                    onConnect={onConnect}
+                    onConnectEnd={onConnectEnd}
+                    onNodeDragStop={onNodeDragStop}
+                    onEdgeClick={onEdgeClick}
+                    nodesDraggable={true}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}                     
+                    nodeTypes={nodeTypes}>
+                  <Controls />
+                  <MiniMap />
+                  <Background variant="dots" gap={12} size={1} />
+                  <Panel position="top-right">
+                    <h1>{(trees != null && treeId != null) ? trees.find(tree => tree.id == treeId).treeLabel : 'Select a tree'}</h1>
+                    <ClayButton.Group spaced>
+                      { treeId != null ?
+                        <>
+                          <ClayButton
+                            displayType="secondary"
+                            onClick={() => {if(treeId != null) { 
+                              loadGraphData(treeId) }}}
+                          >
+                            Refresh Data
+                          </ClayButton>
+                          <ClayButton 
+                            displayType="secondary"
+                            onClick={() => onLayout('TB')}
+                          >
+                            Auto Layout
+                          </ClayButton>
+                        </> 
+                      :
+                        <></>
+                      }
+                      <ClayButton 
+                        displayType="secondary"
+                        onClick={onSelectTree}
+                      >
+                        Select Tree
+                      </ClayButton>
+                    </ClayButton.Group>                      
+                  </Panel>
+                </ReactFlow>
               </div>
             </div>
+
+            <LoadingModal 
+              open={loading}
+            />
+            <TreeSelectionModal
+              open={treeSelectionModalOpen && !loading}
+              trees={trees}
+              treeId={treeId}
+              onClose={handleTreeSelectionModalClose}
+              onTreeSelection={handleTreeSelection} />                
             <EdgeCreationModal
-              open={edgeCreationModalOpen}
+              open={edgeCreationModalOpen && !loading}
               onClose={handleEdgeCreationModalClose}
               onEdgeCreation={handleEdgeCreation} />            
             <EdgeEditionModal
-              open={edgeEditionModalOpen}
+              open={edgeEditionModalOpen && !loading}
               label={currentEdge ? currentEdge.label : ''}
               currentEdge={currentEdge}
               onClose={handleEdgeEditionModalClose}
               onEdgeDeletion={handleEdgeDelete}
               onLabelChange={handleEdgeLabelChange} />
             <NodeCreationModal
-              open={nodeCreationModalOpen}
+              open={nodeCreationModalOpen && !loading}
               onClose={handleNodeCreationModalClose}
               onNodeCreation={handleNodeCreation} />
             <NodeUpdateModal
-              open={nodeUpdateModalOpen}
+              open={nodeUpdateModalOpen && !loading}
               nodeTitle={currentNode ? currentNode.data.nodeTitle : ''}
               nodeText={currentNode ? currentNode.data.nodeText : ''}
               onClose={handleNodeUpdateModalClose}

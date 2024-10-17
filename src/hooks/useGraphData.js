@@ -9,8 +9,9 @@ export const useGraphData = (nodeService, edgeService, fitView) => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  const loadGraphData = useCallback(() => {
-    nodeService.getNodes().then(nodeData => {
+  const loadGraphData = useCallback((treeId, setLoading) => {
+    setLoading(true);
+    nodeService.getNodes(treeId).then(nodeData => {
       const nodes = nodeData.map(node => ({
         id: '' + node.id,
         type: 'custom',
@@ -23,7 +24,7 @@ export const useGraphData = (nodeService, edgeService, fitView) => {
         }
       }));
 
-      edgeService.getEdges().then(edgeData => {
+      edgeService.getEdges(treeId).then(edgeData => {
         const edges = edgeData.map(edge => ({
           id: '' + edge.id,
           source: '' + edge.sourceNodeId, 
@@ -32,6 +33,7 @@ export const useGraphData = (nodeService, edgeService, fitView) => {
           data: { text: edge.edgeLabel }
         }));
 
+        setLoading(false);
         setNodes(nodes);
         setEdges(edges);
         fitView();

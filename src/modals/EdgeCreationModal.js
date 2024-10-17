@@ -47,6 +47,7 @@ function EdgeCreationModal(props) {
                 </ClayButton>
                 <ClayButton onClick={() => {
                   props.onEdgeCreation(edgeLabel);
+                  setEdgeLabel('');
                   onOpenChange(false);
                 }}>
                   Save changes

@@ -5,6 +5,7 @@ import "./GraphEditor.css";
 import '@xyflow/react/dist/style.css';
 import '@clayui/css/lib/css/atlas.css';
 
+import TreeService from './services/TreeService';
 import NodeService from './services/NodeService';
 import EdgeService from './services/EdgeService';
 
@@ -20,6 +21,13 @@ class GraphEditorWebComponent extends HTMLElement {
     authString = `${this.username}:${this.password}`;
 
     client = "graph-editor-user-agent";
+
+    treeObjectName = 'decisiontrees';
+    treeNodesRelationshipName = 'decisionTreeQuestions';
+    treeNodesRelationshipId = 'r_decisionTreeQuestions_c_decisionTreeId';
+    treeEdgesRelationshipName = 'decisionTreeOptions';
+    treeEdgesRelationshipId = 'r_decisionTreeOptions_c_decisionTreeId';
+    treeLabel = 'decisionTreeName';
 
     nodeObjectName = 'questions';
     nodeTitle = 'title';
@@ -63,8 +71,10 @@ class GraphEditorWebComponent extends HTMLElement {
             <ReactFlowProvider>  
                 <GraphEditor
                     parentStyles={parentStyles} 
-                    nodeService={new NodeService(this.authString, this.client, this.nodeObjectName, this.nodeTitle, this.nodeText, this.xPosition, this.yPosition)}
-                    edgeService={new EdgeService(this.authString, this.client, this.edgeObjectName, this.sourceRelationId, this.targetRelationId, this.edgeLabel)}
+                    treeId={null}
+                    treeService={new TreeService(this.authString, this.client, this.treeObjectName, this.treeLabel)}
+                    nodeService={new NodeService(this.authString, this.client, this.nodeObjectName, this.treeObjectName, this.treeNodesRelationshipName, this.treeNodesRelationshipId, this.nodeTitle, this.nodeText, this.xPosition, this.yPosition)}
+                    edgeService={new EdgeService(this.authString, this.client, this.edgeObjectName, this.treeObjectName, this.treeEdgesRelationshipName, this.treeEdgesRelationshipId, this.sourceRelationId, this.targetRelationId, this.edgeLabel)}
                 />
             </ReactFlowProvider>,
             this.shadowRoot

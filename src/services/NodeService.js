@@ -2,19 +2,22 @@ import ApiService from './ApiService';
 
 class NodeService {
 
-    constructor(authString, client, nodeObjectName, nodeTitle, nodeText, xPosition, yPosition) {
+    constructor(authString, client, nodeObjectName, treeObjectName, treeNodesRelationName, treeNodesRelationId, nodeTitle, nodeText, xPosition, yPosition) {
         this.authString = authString;
         this.client = client;
         this.nodeObjectName = nodeObjectName;
+        this.treeObjectName = treeObjectName;
+        this.treeNodesRelationName = treeNodesRelationName;
+        this.treeNodesRelationId = treeNodesRelationId;
         this.nodeTitle = nodeTitle;
         this.nodeText = nodeText;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
     }
 
-    getNodes() {
+    getNodes(treeId) {
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.nodeObjectName + "/?fields=id%2C" + this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, this.authString, this.client, "GET").then(data => {
+        return ApiService.makeCall("http://localhost:8080/o/c/" + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, this.authString, this.client, "GET").then(data => {
             return data.items.map(item => ({
                 id: item.id,
                 nodeTitle: item[this.nodeTitle],
@@ -26,9 +29,10 @@ class NodeService {
 
     }
 
-    createNode(nodeTitle, nodeText, xPosition, yPosition) {
+    createNode(treeId, nodeTitle, nodeText, xPosition, yPosition) {
         
         const body = {
+            [this.treeNodesRelationId]: treeId,
             [this.nodeTitle]: nodeTitle,
             [this.nodeText]: nodeText,
             [this.xPosition]: xPosition,

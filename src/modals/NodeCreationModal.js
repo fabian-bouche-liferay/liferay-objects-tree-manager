@@ -79,6 +79,9 @@ function NodeCreationModal(props) {
                 </ClayButton>
                 <ClayButton onClick={() => {
                   props.onNodeCreation(edgeLabel, nodeTitle, nodeText);
+                  setEdgeLabel('');
+                  setNodeTitle('');
+                  setNodeText('');
                   onOpenChange(false);
                 }}>
                   Save changes
