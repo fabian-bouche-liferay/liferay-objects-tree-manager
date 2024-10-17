@@ -1,0 +1,19 @@
+assemble:
+    - from: build/static
+      into: static
+graph-editor-custom-element-js:
+    url: js/main.*.js
+    type: globalJS
+    name: Graph Editor JS
+graph-editor-custom-element-css:
+    url: css/main.*.css
+    type: globalCSS
+    name: Graph Editor CSS
+graph-editor-user-agent:
+    .serviceAddress: localhost:8080
+    .serviceScheme: http
+    name: Graph Editor User Agent
+    scopes:
+        - c_question.everything
+        - c_option.everything.
+    type: oAuthApplicationUserAgent
