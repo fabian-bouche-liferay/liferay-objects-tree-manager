@@ -4,10 +4,8 @@ export const useEdgeUpdate = (edgeService, edges, setEdges) => {
 
     const [edgeEditionModalOpen, setEdgeEditionModalOpen] = useState(false);
     const [currentEdge, setCurrentEdge] = useState(null);
-    const [labelInput, setLabelInput] = useState('');
 
     const onEdgeClick = (event, edge) => {
-      setLabelInput(edge.label);
       setCurrentEdge(edge);
       setEdgeEditionModalOpen(true);
     };
@@ -43,6 +41,6 @@ export const useEdgeUpdate = (edgeService, edges, setEdges) => {
     
     };
     
-    return {onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, labelInput, currentEdge};
+    return {onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, currentEdge};
 };
 

@@ -10,6 +10,10 @@ export const useNodeUpdate = (nodeService, nodes, setNodes) => {
         setNodeUpdateModalOpen(true);
     }
 
+    const onNodeDragStop = (event, node) => {
+        nodeService.updateNodePosition(node.id, node.position.x, node.position.y);
+    }
+
     const handleNodeDelete = () => {
 
         const updatedNodes = nodes.filter(node => node.id !== currentNode.id);
@@ -46,6 +50,6 @@ export const useNodeUpdate = (nodeService, nodes, setNodes) => {
     }
 
     
-    return {onNodeClick, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, currentNode, nodeUpdateModalOpen};
+    return {onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, currentNode, nodeUpdateModalOpen};
 };
 

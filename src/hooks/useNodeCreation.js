@@ -1,17 +1,30 @@
 import { useState, useCallback } from 'react';
 
+import {
+  useReactFlow,
+} from '@xyflow/react';
+
+
 export const useNodeCreation = (nodeService, edgeService, setNodes, setEdges) => {
 
     const [nodeCreationModalOpen, setNodeCreationModalOpen] = useState(false); // For popover position
     const [currentNode, setCurrentNode] = useState(null); // To track clicked edge
+    const [xPosition, setXPosition] = useState(0);
+    const [yPosition, setYPosition] = useState(0);
+    const { screenToFlowPosition } = useReactFlow();
 
     const onConnectEnd = useCallback(
       (event, connectionState) => {
         if (!connectionState.isValid) {
           setCurrentNode(connectionState.fromNode);
+          const { clientX, clientY } =
+            'changedTouches' in event ? event.changedTouches[0] : event;
+          setXPosition(clientX);
+          setYPosition(clientY);
           setNodeCreationModalOpen(true);
         }
       },
+      [screenToFlowPosition],
     );
 
     const handleNodeCreationModalClose = () => {
@@ -19,12 +32,15 @@ export const useNodeCreation = (nodeService, edgeService, setNodes, setEdges) =>
     }
     
     const handleNodeCreation = (edgeLabel, nodeTitle, nodeText) => {
-      nodeService.createNode(nodeTitle, nodeText).then(newNodeData => {
+      nodeService.createNode(nodeTitle, nodeText, xPosition, yPosition).then(newNodeData => {
     
         const newNode = {
           id: '' + newNodeData.id,
           type: 'custom',
-          position: { x: newNodeData.xPosition, y: newNodeData.yPosition },
+          position: screenToFlowPosition({
+            x: xPosition,
+            y: yPosition,
+          }),
           draggable: true,
           data: { 
             nodeTitle: nodeTitle,

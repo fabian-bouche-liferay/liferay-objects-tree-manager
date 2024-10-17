@@ -5,7 +5,6 @@ import {
     Controls,
     Background,
     Panel,
-    addEdge,
     useReactFlow,
   } from '@xyflow/react';
 
@@ -29,13 +28,13 @@ function GraphEditor(props) {
     const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, loadGraphData } = useGraphData(props.nodeService, props.edgeService, fitView);
     const { onConnect, handleEdgeCreationModalClose, handleEdgeCreation, edgeCreationModalOpen } = useEdgeCreation(props.edgeService, setEdges);
     const { onConnectEnd, handleNodeCreationModalClose, handleNodeCreation, nodeCreationModalOpen } = useNodeCreation(props.nodeService, props.edgeService, setNodes, setEdges);
-    const { onNodeClick, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, nodeUpdateModalOpen, currentNode } = useNodeUpdate(props.nodeService, nodes, setNodes);
-    const { onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, labelInput, currentEdge } = useEdgeUpdate(props.edgeService, edges, setEdges)
+    const { onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, nodeUpdateModalOpen, currentNode } = useNodeUpdate(props.nodeService, nodes, setNodes);
+    const { onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, currentEdge } = useEdgeUpdate(props.edgeService, edges, setEdges)
 
     const onLayout = useCallback(
       (direction) => {
         console.log(nodes);
-        const layouted = getLayoutedElements(nodes, edges, { direction });
+        const layouted = getLayoutedElements(nodes, edges, { direction }, props.nodeService);
   
         setNodes([...layouted.nodes]);
         setEdges([...layouted.edges]);
@@ -60,6 +59,7 @@ function GraphEditor(props) {
                       onNodeClick={onNodeClick}
                       onConnect={onConnect}
                       onConnectEnd={onConnectEnd}
+                      onNodeDragStop={onNodeDragStop}
                       onEdgeClick={onEdgeClick}
                       nodesDraggable={true}
                       onNodesChange={onNodesChange}

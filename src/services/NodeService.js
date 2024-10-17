@@ -58,6 +58,17 @@ class NodeService {
 
     }
 
+    updateNodePosition(nodeId, xPosition, yPosition) {
+
+        const body = {
+            [this.xPosition]: xPosition,
+            [this.yPosition]: yPosition
+        };
+
+        return ApiService.makeCall("http://localhost:8080/o/c/" + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
+
+    }
+
     deleteNode(nodeId) {
 
         return ApiService.makeCall("http://localhost:8080/o/c/" + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "DELETE");
