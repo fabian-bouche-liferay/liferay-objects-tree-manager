@@ -1,8 +1,8 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ClayButton from '@clayui/button';
 import ClayModal, {useModal} from '@clayui/modal';
-import ClayForm, {ClayInput, ClaySelect} from '@clayui/form';
+import ClayForm, {ClaySelect} from '@clayui/form';
 
 function TreeSelectionModal(props) {
 
@@ -37,7 +37,7 @@ function TreeSelectionModal(props) {
           size="lg"
           status="info"
         >
-          <ClayModal.Header>Select tree {treeId} </ClayModal.Header>
+          <ClayModal.Header>Select tree</ClayModal.Header>
           <ClayModal.Body>
             <ClayForm.Group>
               <label htmlFor="nodeTitle">Node Title</label>

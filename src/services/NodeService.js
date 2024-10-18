@@ -2,7 +2,8 @@ import ApiService from './ApiService';
 
 class NodeService {
 
-    constructor(authString, client, nodeObjectName, treeObjectName, treeNodesRelationName, treeNodesRelationId, nodeTitle, nodeText, xPosition, yPosition) {
+    constructor(baseURL, authString, client, nodeObjectName, treeObjectName, treeNodesRelationName, treeNodesRelationId, nodeTitle, nodeText, xPosition, yPosition) {
+        this.baseURL = baseURL;
         this.authString = authString;
         this.client = client;
         this.nodeObjectName = nodeObjectName;
@@ -17,7 +18,7 @@ class NodeService {
 
     getNodes(treeId) {
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, this.authString, this.client, "GET").then(data => {
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, this.authString, this.client, "GET").then(data => {
             return data.items.map(item => ({
                 id: item.id,
                 nodeTitle: item[this.nodeTitle],
@@ -38,7 +39,7 @@ class NodeService {
             [this.xPosition]: xPosition,
             [this.yPosition]: yPosition
         };
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.nodeObjectName, this.authString, this.client, "POST", body).then(data => {
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName, this.authString, this.client, "POST", body).then(data => {
             return {
                 id: data.id,
                 nodeTitle: data[this.nodeTitle],
@@ -57,7 +58,7 @@ class NodeService {
             [this.nodeText]: nodeText
         };
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
 
     }
 
@@ -68,13 +69,13 @@ class NodeService {
             [this.yPosition]: yPosition
         };
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
 
     }
 
     deleteNode(nodeId) {
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "DELETE");
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "DELETE");
 
     }
 

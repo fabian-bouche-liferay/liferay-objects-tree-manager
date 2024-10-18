@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import ClayButton from '@clayui/button';
 import ClayModal, {useModal} from '@clayui/modal';

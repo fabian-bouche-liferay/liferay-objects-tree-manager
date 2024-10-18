@@ -92,7 +92,7 @@ function GraphEditor(props) {
                   <MiniMap />
                   <Background variant="dots" gap={12} size={1} />
                   <Panel position="top-right">
-                    <h1>{(trees != null && treeId != null) ? trees.find(tree => tree.id == treeId).treeLabel : 'Select a tree'}</h1>
+                    <h1>{(trees != null && treeId != null) ? trees.find(tree => tree.id == treeId).treeLabel : 'No tree selected'}</h1>
                     <ClayButton.Group spaced>
                       { treeId != null ?
                         <>

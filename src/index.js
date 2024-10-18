@@ -22,6 +22,8 @@ class GraphEditorWebComponent extends HTMLElement {
 
     client = "graph-editor-user-agent";
 
+    baseURL = "http://localhost:8080/o/c/";
+
     treeObjectName = 'decisiontrees';
     treeNodesRelationshipName = 'decisionTreeQuestions';
     treeNodesRelationshipId = 'r_decisionTreeQuestions_c_decisionTreeId';
@@ -72,9 +74,9 @@ class GraphEditorWebComponent extends HTMLElement {
                 <GraphEditor
                     parentStyles={parentStyles} 
                     treeId={null}
-                    treeService={new TreeService(this.authString, this.client, this.treeObjectName, this.treeLabel)}
-                    nodeService={new NodeService(this.authString, this.client, this.nodeObjectName, this.treeObjectName, this.treeNodesRelationshipName, this.treeNodesRelationshipId, this.nodeTitle, this.nodeText, this.xPosition, this.yPosition)}
-                    edgeService={new EdgeService(this.authString, this.client, this.edgeObjectName, this.treeObjectName, this.treeEdgesRelationshipName, this.treeEdgesRelationshipId, this.sourceRelationId, this.targetRelationId, this.edgeLabel)}
+                    treeService={new TreeService(this.baseURL, this.authString, this.client, this.treeObjectName, this.treeLabel)}
+                    nodeService={new NodeService(this.baseURL, this.authString, this.client, this.nodeObjectName, this.treeObjectName, this.treeNodesRelationshipName, this.treeNodesRelationshipId, this.nodeTitle, this.nodeText, this.xPosition, this.yPosition)}
+                    edgeService={new EdgeService(this.baseURL, this.authString, this.client, this.edgeObjectName, this.treeObjectName, this.treeEdgesRelationshipName, this.treeEdgesRelationshipId, this.sourceRelationId, this.targetRelationId, this.edgeLabel)}
                 />
             </ReactFlowProvider>,
             this.shadowRoot

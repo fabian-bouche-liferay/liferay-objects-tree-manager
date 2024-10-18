@@ -2,7 +2,8 @@ import ApiService from './ApiService';
 
 class EdgeService {
 
-    constructor(authString, client, edgeObjectName, treeObjectName, treeEdgesRelationName, treeEdgesRelationId, sourceRelationId, targetRelationId, edgeLabel) {
+    constructor(baseURL, authString, client, edgeObjectName, treeObjectName, treeEdgesRelationName, treeEdgesRelationId, sourceRelationId, targetRelationId, edgeLabel) {
+        this.baseURL = baseURL;
         this.authString = authString;
         this.client = client;
         this.edgeLabel = edgeLabel;
@@ -16,7 +17,7 @@ class EdgeService {
 
     getEdges(treeId) {
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.treeObjectName + "/" + treeId + "/" + this.treeEdgesRelationName + "/?fields=id%2C" + this.edgeLabel + "%2C" + this.targetRelationId + "%2C" + this.sourceRelationId, this.authString, this.client, "GET").then(data => {
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeEdgesRelationName + "/?fields=id%2C" + this.edgeLabel + "%2C" + this.targetRelationId + "%2C" + this.sourceRelationId, this.authString, this.client, "GET").then(data => {
             return data.items.map(item => ({
                 id: item.id,
                 sourceNodeId: item[this.sourceRelationId],
@@ -29,7 +30,7 @@ class EdgeService {
 
     deleteEdge(edgeId) {
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.edgeObjectName + "/" + edgeId, this.authString, this.client, "DELETE")
+        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/" + edgeId, this.authString, this.client, "DELETE")
 
     }
 
@@ -39,7 +40,7 @@ class EdgeService {
             [this.edgeLabel]: newLabel
         };
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.edgeObjectName + "/" + edgeId, this.authString, this.client, "PATCH", body)
+        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/" + edgeId, this.authString, this.client, "PATCH", body)
 
     }
 
@@ -52,7 +53,7 @@ class EdgeService {
             [this.sourceRelationId]: sourceNodeId
         };
 
-        return ApiService.makeCall("http://localhost:8080/o/c/" + this.edgeObjectName + "/", this.authString, this.client, "POST", body).then(data => {
+        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/", this.authString, this.client, "POST", body).then(data => {
             return {
                 id: data.id,
                 edgeLabel: data[this.edgeLabel],
