@@ -21,6 +21,14 @@ class TreeService {
 
     }
 
+    getTree(erc) {
+
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/by-external-reference-code/" + erc + "/?fields=id", this.authString, this.client, "GET").then(data => {
+            return data;
+        });
+
+    }
+
 }
 
 export default TreeService;

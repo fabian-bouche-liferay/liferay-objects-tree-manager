@@ -12,10 +12,12 @@ function NodeUpdateModal(props) {
 
   const [nodeTitle, setNodeTitle] = useState('');
   const [nodeText, setNodeText] = useState('');
+  const [nodeRoot, setNodeRoot] = useState(false);
 
   useEffect(() => {
     setNodeTitle(props.nodeTitle);
     setNodeText(props.nodeText);
+    setNodeRoot(props.nodeRoot);
   }, [props]);
 
   const handleNodeTitleChange = function(event) {
@@ -34,7 +36,7 @@ function NodeUpdateModal(props) {
           size="lg"
           status="info"
         >
-          <ClayModal.Header>Update a Node</ClayModal.Header>
+          <ClayModal.Header>Update a Node {nodeRoot ? "[Root node]" : ''}</ClayModal.Header>
           <ClayModal.Body>
             <ClayForm.Group>
               <label htmlFor="nodeTitle">Node Title</label>
@@ -77,6 +79,20 @@ function NodeUpdateModal(props) {
                 >
                   Cancel
                 </ClayButton>
+
+                <ClayButton 
+                  displayType="secondary"
+                  onClick={
+                    () => {
+                      props.onNodeSetAsStart();
+                      setNodeRoot(true);
+                      onOpenChange(false);
+                    }
+                  }
+                >
+                  Set as start node
+                </ClayButton>
+
                 <ClayButton onClick={() => {
                   props.onNodeUpdate(nodeTitle, nodeText);
                   onOpenChange(false);

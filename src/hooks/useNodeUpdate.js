@@ -22,6 +22,34 @@ export const useNodeUpdate = (nodeService, nodes, setNodes) => {
         nodeService.deleteNode(currentNode.id);
     }
 
+    const handleNodeSetAsStart = () => {
+
+        nodeService.setNodeAsStart(currentNode.id);
+
+        const updatedNodes = nodes.map((node) => {
+            if (node.id == currentNode.id) {
+                return { 
+                    ...node, 
+                    data: { 
+                        ...node.data,  // Keep other properties in data intact
+                        nodeRoot: true 
+                    }
+                };
+            } else {
+                return { 
+                    ...node, 
+                    data: { 
+                        ...node.data,  // Keep other properties in data intact
+                        nodeRoot: false 
+                    }
+                };
+            }
+        });
+
+        setNodes(updatedNodes);
+
+    }
+
     const handleNodeUpdate = (nodeTitle, nodeText) => {
 
         if (currentNode) {
@@ -50,6 +78,6 @@ export const useNodeUpdate = (nodeService, nodes, setNodes) => {
     }
 
     
-    return {onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, currentNode, nodeUpdateModalOpen};
+    return {onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, handleNodeSetAsStart, currentNode, nodeUpdateModalOpen};
 };
 

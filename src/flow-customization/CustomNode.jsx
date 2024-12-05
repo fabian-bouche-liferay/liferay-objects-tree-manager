@@ -14,7 +14,7 @@ function CustomNode({ data, isConnectable }) {
       />
 
       <ClayPanel
-        displayTitle={data.nodeTitle}
+        displayTitle={data.nodeTitle + (data.nodeRoot ? ' [ROOT]' : '')}
         displayType="secondary"
         style={{
           marginBottom: 0,

@@ -14,6 +14,28 @@ graph-editor-user-agent:
     .serviceScheme: http
     name: Graph Editor User Agent
     scopes:
+        - c_decisiontree.everything
         - c_question.everything
-        - c_option.everything.
+        - c_option.everything
     type: oAuthApplicationUserAgent
+graph-navigator-user-agent:
+    .serviceAddress: localhost:8080
+    .serviceScheme: http
+    name: Graph Navigator User Agent
+    scopes:
+        - c_decisiontree.read
+        - c_question.read
+        - c_option.read
+    type: oAuthApplicationUserAgent
+graph-editor-custom-element:
+    friendlyURLMapping: graph-editor
+    htmlElementName: graph-editor
+    instanceable: false
+    name: Liferay Graph Editor
+    portletCategoryName: category.client-extensions
+    type: customElement
+    cssURLs:
+        - css/main.*.css
+    urls:
+        - js/main.*.js
+    useESM: false

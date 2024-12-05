@@ -17,7 +17,7 @@ function LoadingModal(props) {
           size="lg"
           status="info"
         >
-          <ClayModal.Header>Loading Tree</ClayModal.Header>
+          <ClayModal.Header>Loading</ClayModal.Header>
           <ClayModal.Body>
               <ClayLoadingIndicator displayType="primary" shape="squares" size="lg" />
           </ClayModal.Body>

@@ -36,7 +36,7 @@ function GraphEditor(props) {
     const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, loadGraphData } = useGraphData(props.nodeService, props.edgeService, fitView);
     const { onConnect, handleEdgeCreationModalClose, handleEdgeCreation, edgeCreationModalOpen } = useEdgeCreation(props.edgeService, setEdges, treeId);
     const { onConnectEnd, handleNodeCreationModalClose, handleNodeCreation, nodeCreationModalOpen } = useNodeCreation(props.nodeService, props.edgeService, setNodes, setEdges, treeId);
-    const { onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, nodeUpdateModalOpen, currentNode } = useNodeUpdate(props.nodeService, nodes, setNodes);
+    const { onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, handleNodeSetAsStart, nodeUpdateModalOpen, currentNode } = useNodeUpdate(props.nodeService, nodes, setNodes);
     const { onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, currentEdge } = useEdgeUpdate(props.edgeService, edges, setEdges);
     const { onSelectTree, handleTreeSelectionModalClose, handleTreeSelection, treeSelectionModalOpen } = useTreeSelection(setTreeId);
 
@@ -99,7 +99,7 @@ function GraphEditor(props) {
                           <ClayButton
                             displayType="secondary"
                             onClick={() => {if(treeId != null) { 
-                              loadGraphData(treeId) }}}
+                              loadGraphData(treeId, setLoading) }}}
                           >
                             Refresh Data
                           </ClayButton>
@@ -151,9 +151,11 @@ function GraphEditor(props) {
               onNodeCreation={handleNodeCreation} />
             <NodeUpdateModal
               open={nodeUpdateModalOpen && !loading}
+              nodeRoot={currentNode ? currentNode.data.nodeRoot : false}
               nodeTitle={currentNode ? currentNode.data.nodeTitle : ''}
               nodeText={currentNode ? currentNode.data.nodeText : ''}
               onClose={handleNodeUpdateModalClose}
+              onNodeSetAsStart={handleNodeSetAsStart}
               onNodeDeletion={handleNodeDelete}
               onNodeUpdate={handleNodeUpdate} />              
         </div>

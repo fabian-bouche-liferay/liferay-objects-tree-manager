@@ -20,6 +20,8 @@ export const useGraphData = (nodeService, edgeService, fitView) => {
         data: { 
           nodeTitle: node.nodeTitle,
           nodeText: node.nodeText,
+          nodeRoot: node.nodeRoot,
+          treeId: treeId,
           id: node.id
         }
       }));
@@ -30,7 +32,10 @@ export const useGraphData = (nodeService, edgeService, fitView) => {
           source: '' + edge.sourceNodeId, 
           target: '' + edge.targetNodeId, 
           label: edge.edgeLabel,
-          data: { text: edge.edgeLabel }
+          data: { 
+            text: edge.edgeLabel,
+            treeId: treeId
+          }
         }));
 
         setLoading(false);

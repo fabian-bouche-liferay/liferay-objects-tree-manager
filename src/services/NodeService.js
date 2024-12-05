@@ -2,7 +2,9 @@ import ApiService from './ApiService';
 
 class NodeService {
 
-    constructor(baseURL, authString, client, nodeObjectName, treeObjectName, treeNodesRelationName, treeNodesRelationId, nodeTitle, nodeText, xPosition, yPosition) {
+    //new NodeService(this.baseURL, this.authString, this.client, this.nodeObjectName, this.treeObjectName, this.treeNodesRelationshipName, this.treeNodesRelationshipId, this.nodeTitle, this.nodeText, this.nodeRoot, this.xPosition, this.yPosition)}
+
+    constructor(baseURL, authString, client, nodeObjectName, treeObjectName, treeNodesRelationName, treeNodesRelationId, nodeTitle, nodeText, nodeRoot, xPosition, yPosition) {
         this.baseURL = baseURL;
         this.authString = authString;
         this.client = client;
@@ -12,17 +14,29 @@ class NodeService {
         this.treeNodesRelationId = treeNodesRelationId;
         this.nodeTitle = nodeTitle;
         this.nodeText = nodeText;
+        this.nodeRoot = nodeRoot;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
     }
 
+    getStartNode(treeId) {
+       
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeRoot, this.authString, this.client, "GET").then(data => {
+            return data.items.filter(item => {return item[this.nodeRoot]}).map(item => ({
+                id: item.id
+            }))
+        });
+
+    }
+
     getNodes(treeId) {
 
-        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, this.authString, this.client, "GET").then(data => {
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeRoot + "%2C"+ this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, this.authString, this.client, "GET").then(data => {
             return data.items.map(item => ({
                 id: item.id,
                 nodeTitle: item[this.nodeTitle],
                 nodeText: item[this.nodeText],
+                nodeRoot: item[this.nodeRoot],
                 xPosition: item[this.xPosition] ?? 0,
                 yPosition: item[this.yPosition] ?? 0
             }));
@@ -36,6 +50,7 @@ class NodeService {
             [this.treeNodesRelationId]: treeId,
             [this.nodeTitle]: nodeTitle,
             [this.nodeText]: nodeText,
+            [this.nodeRoot]: false,
             [this.xPosition]: xPosition,
             [this.yPosition]: yPosition
         };
@@ -59,6 +74,28 @@ class NodeService {
         };
 
         return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
+
+    }
+
+    setNodeAsStart(nodeId) {
+
+        ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId + "?fields=id%2C" + this.treeNodesRelationId, this.authString, this.client, "GET").then(data => {
+
+            this.getNodes(data[this.treeNodesRelationId]).then(nodes => {
+
+                nodes.forEach(node => {
+    
+                    let body = {
+                        [this.nodeRoot]: node.id == nodeId
+                    }
+                    ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + node.id, this.authString, this.client, "PATCH", body);
+    
+                });
+    
+            });
+    
+
+        });
 
     }
 

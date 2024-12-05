@@ -66,7 +66,7 @@ function TreeSelectionModal(props) {
                   onOpenChange(false);
                 }}
                 >
-                  Save changes
+                  Select
                 </ClayButton>
               </ClayButton.Group>
             }

@@ -10,15 +10,16 @@ class ApiService {
                 .FromUserAgentApplication(client)
                 .fetch(url, {
                     method: method,
+                    ...(body ? { headers: { 'Content-Type': 'application/json'} } : {}),
                     ...(body ? { body: JSON.stringify(body) } : {})
                 });
 
         } else {
             let headers = new Headers();
-            headers.set('Authorization', 'Basic ' + btoa(authString));
             if(body) {
                 headers.set('Content-Type', 'application/json');
             }
+            headers.set('Authorization', 'Basic ' + btoa(authString));
 
             call = fetch(url, {
                 method: method,
