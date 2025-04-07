@@ -6,14 +6,23 @@ class ApiService {
 
         if(window.Liferay !== undefined) {
 
-            call = window.Liferay.OAuth2Client
-                .FromUserAgentApplication(client)
+            call = window.Liferay.Util
                 .fetch(url, {
                     method: method,
                     ...(body ? { headers: { 'Content-Type': 'application/json'} } : {}),
                     ...(body ? { body: JSON.stringify(body) } : {})
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+    
+                    if (response.status === 204) {
+                        return null;
+                    }
+    
+                    return response.json();
                 });
-
+    
         } else {
             let headers = new Headers();
             if(body) {
@@ -40,6 +49,7 @@ class ApiService {
         }
 
         return call.then(data => {
+            console.log(data);
             return data;
         });
 
