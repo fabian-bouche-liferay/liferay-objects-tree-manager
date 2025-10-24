@@ -6,6 +6,10 @@ import ClayForm, {ClayInput} from '@clayui/form';
 
 function EdgeEditionModal(props) {
 
+  const [advanced, setAdvanced] = useState(false);
+  const [dptUrl, setDptUrl] = useState(null);
+  const [modalSize, setModalSize] = useState('lg');
+
   const { observer, onOpenChange, open, onClose } = useModal({
     onClose: props.onClose
   });
@@ -14,8 +18,18 @@ function EdgeEditionModal(props) {
 
   useEffect(() => {
     setEdgeLabel(props.label);
+    if(props.currentEdge != null) {
+      setDptUrl(props.edgeDptBaseUrl + props.currentEdge.id + "?p_p_state=pop_up");
+    }
   }, [props]);
 
+  useEffect(() => {
+      if(advanced) {
+        setModalSize("full-screen");
+      } else {
+        setModalSize("lg");
+      }
+    }, [advanced]);
   const handleEdgeLabelChange = function(event) {
     setEdgeLabel(event.target.value);
   }
@@ -25,22 +39,27 @@ function EdgeEditionModal(props) {
       {props.open && (
         <ClayModal
           observer={observer}
-          size="lg"
+          size={modalSize}
           status="info"
         >
           <ClayModal.Header>Update Edge Label</ClayModal.Header>
-          <ClayModal.Body>
-            <ClayForm.Group>
-              <label htmlFor="nodeLabel">Label</label>
-              <ClayInput
-                id="nodeLabel"
-                placeholder="Insert label here"
-                value={edgeLabel}
-                onChange={handleEdgeLabelChange}
-                type="text"
-              />
-            </ClayForm.Group>
-          </ClayModal.Body>
+          {advanced && dptUrl != null ?
+            <ClayModal.Body url={dptUrl}>              
+            </ClayModal.Body>
+          :
+            <ClayModal.Body>
+              <ClayForm.Group>
+                <label htmlFor="nodeLabel">Label</label>
+                <ClayInput
+                  id="nodeLabel"
+                  placeholder="Insert label here"
+                  value={edgeLabel}
+                  onChange={handleEdgeLabelChange}
+                  type="text"
+                />
+              </ClayForm.Group>
+            </ClayModal.Body>
+          }
           <ClayModal.Footer
             last={
               <ClayButton.Group spaced>
@@ -52,14 +71,20 @@ function EdgeEditionModal(props) {
                   }}
                 >
                   Delete Edge
-                </ClayButton>                
+                </ClayButton>      
+                <ClayButton
+                  displayType="secondary"
+                  onClick={() => setAdvanced(!advanced)}
+                >
+                  Toggle Advanced
+                </ClayButton>                          
                 <ClayButton
                   displayType="secondary"
                   onClick={() => onOpenChange(false)}
                 >
                   Cancel
                 </ClayButton>
-                <ClayButton onClick={() => {
+                <ClayButton disabled={advanced} onClick={() => {
                   props.onLabelChange(edgeLabel);
                   onOpenChange(false);
                 }}>

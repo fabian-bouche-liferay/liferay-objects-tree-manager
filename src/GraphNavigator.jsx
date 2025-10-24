@@ -9,6 +9,7 @@ function GraphNavigator(props) {
 
   const [ loading, setLoading ] = useState(true);
   const [ currentNodeId, setCurrentNodeId ] = useState(null);
+  const [ dptUrl, setDptUrl ] = useState(null);
 
   const { startNodeId, nodes, edges, loadGraphData } = useBrowseGraphData(props.treeService, props.nodeService, props.edgeService);
 
@@ -17,20 +18,30 @@ function GraphNavigator(props) {
   }, [props]);
 
   useEffect(() => {
+    setDptUrl(props.nodeDptBaseUrl + currentNodeId + "?p_p_state=pop_up");
+  }, [currentNodeId])
+
+  useEffect(() => {
     setCurrentNodeId(startNodeId);
   }, [startNodeId]);
 
   return (
       <div>
-        <style>
-          {props.parentStyles}
-        </style>
 
         {nodes.filter(node => {return node.id == currentNodeId }).map(node => 
           (
             <>
               <h2>{node.nodeTitle}</h2>
               <p>{node.nodeText}</p>
+              {dptUrl != null && (
+                <iframe 
+                  src={dptUrl} 
+                  width="800" 
+                  height="600" 
+                  style={{border: "none"}}
+                  loading="lazy">
+                </iframe>
+              )}
             </>
           )
         )}

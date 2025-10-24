@@ -2,10 +2,8 @@ import ApiService from './ApiService';
 
 class EdgeService {
 
-    constructor(baseURL, authString, client, edgeObjectName, treeObjectName, treeEdgesRelationName, treeEdgesRelationId, sourceRelationId, targetRelationId, edgeLabel) {
+    constructor(baseURL, edgeObjectName, treeObjectName, treeEdgesRelationName, treeEdgesRelationId, sourceRelationId, targetRelationId, edgeLabel) {
         this.baseURL = baseURL;
-        this.authString = authString;
-        this.client = client;
         this.edgeLabel = edgeLabel;
         this.edgeObjectName = edgeObjectName;
         this.treeObjectName = treeObjectName;
@@ -17,7 +15,7 @@ class EdgeService {
 
     getEdges(treeId) {
 
-        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeEdgesRelationName + "/?fields=id%2C" + this.edgeLabel + "%2C" + this.targetRelationId + "%2C" + this.sourceRelationId, this.authString, this.client, "GET").then(data => {
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeEdgesRelationName + "/?fields=id%2C" + this.edgeLabel + "%2C" + this.targetRelationId + "%2C" + this.sourceRelationId, "GET").then(data => {
             return data.items.map(item => ({
                 id: item.id,
                 sourceNodeId: item[this.sourceRelationId],
@@ -30,7 +28,7 @@ class EdgeService {
 
     deleteEdge(edgeId) {
 
-        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/" + edgeId, this.authString, this.client, "DELETE")
+        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/" + edgeId, "DELETE")
 
     }
 
@@ -40,7 +38,7 @@ class EdgeService {
             [this.edgeLabel]: newLabel
         };
 
-        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/" + edgeId, this.authString, this.client, "PATCH", body)
+        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/" + edgeId, "PATCH", body)
 
     }
 
@@ -53,7 +51,7 @@ class EdgeService {
             [this.sourceRelationId]: sourceNodeId
         };
 
-        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/", this.authString, this.client, "POST", body).then(data => {
+        return ApiService.makeCall(this.baseURL + this.edgeObjectName + "/", "POST", body).then(data => {
             return {
                 id: data.id,
                 edgeLabel: data[this.edgeLabel],

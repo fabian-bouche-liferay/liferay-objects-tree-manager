@@ -69,10 +69,6 @@ function GraphEditor(props) {
     
     return (
         <div>
-            <style>
-                {props.parentStyles}
-            </style>
-
             <div className="container">
               <div style={{ width: '100%', height: '800px' }}>
 
@@ -139,9 +135,11 @@ function GraphEditor(props) {
               onClose={handleEdgeCreationModalClose}
               onEdgeCreation={handleEdgeCreation} />            
             <EdgeEditionModal
+              edgeDptBaseUrl={props.edgeDptBaseUrl}
               open={edgeEditionModalOpen && !loading}
               label={currentEdge ? currentEdge.label : ''}
               currentEdge={currentEdge}
+              loadGraphData={loadGraphData}
               onClose={handleEdgeEditionModalClose}
               onEdgeDeletion={handleEdgeDelete}
               onLabelChange={handleEdgeLabelChange} />
@@ -150,7 +148,10 @@ function GraphEditor(props) {
               onClose={handleNodeCreationModalClose}
               onNodeCreation={handleNodeCreation} />
             <NodeUpdateModal
+              nodeDptBaseUrl={props.nodeDptBaseUrl}
               open={nodeUpdateModalOpen && !loading}
+              currentNode={currentNode}
+              loadGraphData={loadGraphData}
               nodeRoot={currentNode ? currentNode.data.nodeRoot : false}
               nodeTitle={currentNode ? currentNode.data.nodeTitle : ''}
               nodeText={currentNode ? currentNode.data.nodeText : ''}

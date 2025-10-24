@@ -4,10 +4,8 @@ class NodeService {
 
     //new NodeService(this.baseURL, this.authString, this.client, this.nodeObjectName, this.treeObjectName, this.treeNodesRelationshipName, this.treeNodesRelationshipId, this.nodeTitle, this.nodeText, this.nodeRoot, this.xPosition, this.yPosition)}
 
-    constructor(baseURL, authString, client, nodeObjectName, treeObjectName, treeNodesRelationName, treeNodesRelationId, nodeTitle, nodeText, nodeRoot, xPosition, yPosition) {
+    constructor(baseURL, nodeObjectName, treeObjectName, treeNodesRelationName, treeNodesRelationId, nodeTitle, nodeText, nodeRoot, xPosition, yPosition) {
         this.baseURL = baseURL;
-        this.authString = authString;
-        this.client = client;
         this.nodeObjectName = nodeObjectName;
         this.treeObjectName = treeObjectName;
         this.treeNodesRelationName = treeNodesRelationName;
@@ -21,7 +19,7 @@ class NodeService {
 
     getStartNode(treeId) {
        
-        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeRoot, this.authString, this.client, "GET").then(data => {
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeRoot, "GET").then(data => {
             return data.items.filter(item => {return item[this.nodeRoot]}).map(item => ({
                 id: item.id
             }))
@@ -31,7 +29,7 @@ class NodeService {
 
     getNodes(treeId) {
 
-        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeRoot + "%2C"+ this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, this.authString, this.client, "GET").then(data => {
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeNodesRelationName + "/?fields=id%2C" + this.nodeRoot + "%2C"+ this.nodeTitle + "%2C" + this.nodeText + "%2C" + this.xPosition + "%2C" + this.yPosition, "GET").then(data => {
             return data.items.map(item => ({
                 id: item.id,
                 nodeTitle: item[this.nodeTitle],
@@ -54,7 +52,7 @@ class NodeService {
             [this.xPosition]: xPosition,
             [this.yPosition]: yPosition
         };
-        return ApiService.makeCall(this.baseURL + this.nodeObjectName, this.authString, this.client, "POST", body).then(data => {
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName, "POST", body).then(data => {
             return {
                 id: data.id,
                 nodeTitle: data[this.nodeTitle],
@@ -73,13 +71,13 @@ class NodeService {
             [this.nodeText]: nodeText
         };
 
-        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, "PATCH", body);
 
     }
 
     setNodeAsStart(nodeId) {
 
-        ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId + "?fields=id%2C" + this.treeNodesRelationId, this.authString, this.client, "GET").then(data => {
+        ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId + "?fields=id%2C" + this.treeNodesRelationId, "GET").then(data => {
 
             this.getNodes(data[this.treeNodesRelationId]).then(nodes => {
 
@@ -88,7 +86,7 @@ class NodeService {
                     let body = {
                         [this.nodeRoot]: node.id == nodeId
                     }
-                    ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + node.id, this.authString, this.client, "PATCH", body);
+                    ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + node.id, "PATCH", body);
     
                 });
     
@@ -106,13 +104,13 @@ class NodeService {
             [this.yPosition]: yPosition
         };
 
-        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "PATCH", body);
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, "PATCH", body);
 
     }
 
     deleteNode(nodeId) {
 
-        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, this.authString, this.client, "DELETE");
+        return ApiService.makeCall(this.baseURL + this.nodeObjectName + "/" + nodeId, "DELETE");
 
     }
 

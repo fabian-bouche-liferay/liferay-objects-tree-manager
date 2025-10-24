@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 
 import { Handle, Position } from '@xyflow/react';
 import ClayPanel from '@clayui/panel';

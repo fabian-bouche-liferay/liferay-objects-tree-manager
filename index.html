@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+
+    <title>Liferay React Map CX App</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <script type="text/javascript">
+
+      (function () {
+          if (!window.Liferay) {
+              window.Liferay = {};
+          }
+          
+          if (!window.Liferay.Util) {
+              window.Liferay.Util = {};
+          }
+
+          if (!window.Liferay.Icons) {
+              window.Liferay.Icons = {};
+          }
+
+          window.Liferay.Util.fetch = function (url, options = {}) {
+              const basicAuth = "Basic " + btoa("test@liferay.com:test1234");
+
+              const headers = new Headers(options.headers || {});
+              headers.set("Authorization", basicAuth);
+
+              return fetch(url, {
+                  ...options,
+                  headers,
+              });
+          };
+
+          if (!window.Liferay.ThemeDisplay) {
+            window.Liferay.ThemeDisplay = {};
+            window.Liferay.ThemeDisplay.getLanguageId = () => {return "fr_FR";};
+            window.Liferay.ThemeDisplay.getUserId = () => {return 20126;};
+            window.Liferay.ThemeDisplay.getSiteGroupId = () => {return 20120;};
+            window.Liferay.ThemeDisplay.getPlid = () => {return 1;};
+          }
+
+          window.Liferay.Icons.spritemap = "/icons.svg";
+      })();
+
+    </script>
+
+  </head>
+  <body>
+
+    <script type="module" src="/src/index.jsx"></script> 
+
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <graph-navigator
+      portal-base-url="http://localhost:8080"
+      edge-dpt-base-url="/web/trees/e/"
+      node-dpt-base-url="/web/trees/e/node-display-dpt/42493/"
+      tree-erc="e8d5445a-5be9-fb83-77ac-6d20937d8899"
+      >
+        <tree object-name="tree" object-name-plural="trees" label="name" node-belongs-relationship="nodeBelongs" edge-belongs-relationship="edgeBelongs" />
+        <node object-name="node" object-name-plural="nodes" label="name" text="description" root="root" x="xCoordinates" y="yCoordinates" />
+        <edge object-name="edge" object-name-plural="edges" label="name" source-relationship="source" target-relationship="target" />
+    </graph-navigator>
+
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>

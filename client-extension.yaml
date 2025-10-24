@@ -1,23 +1,15 @@
 assemble:
     - from: build/static
       into: static
-graph-editor-custom-element-js:
-    url: js/main.*.js
-    type: globalJS
-    name: Graph Editor JS
+graph-editor-import-maps-entry:
+    bareSpecifier: grapheditorCX
+    name: Graph Editor CX JS Import Maps Entry
+    type: jsImportMapsEntry
+    url: assets/index-*.js      
 graph-editor-custom-element-css:
-    url: css/main.*.css
+    url: assets/index-*.css
     type: globalCSS
     name: Graph Editor CSS
-graph-editor-user-agent:
-    .serviceAddress: localhost:8080
-    .serviceScheme: http
-    name: Graph Editor User Agent
-    scopes:
-        - c_decisiontree.everything
-        - c_question.everything
-        - c_option.everything
-    type: oAuthApplicationUserAgent
 graph-navigator-user-agent:
     .serviceAddress: localhost:8080
     .serviceScheme: http
@@ -27,15 +19,3 @@ graph-navigator-user-agent:
         - c_question.read
         - c_option.read
     type: oAuthApplicationUserAgent
-graph-editor-custom-element:
-    friendlyURLMapping: graph-editor
-    htmlElementName: graph-editor
-    instanceable: false
-    name: Liferay Graph Editor
-    portletCategoryName: category.client-extensions
-    type: customElement
-    cssURLs:
-        - css/main.*.css
-    urls:
-        - js/main.*.js
-    useESM: false
