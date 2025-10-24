@@ -37,7 +37,7 @@ jobs:
 
       - name: Add 404 fallback
         run: |
-          cp -f build/index.html build/404.html
+          cp -f build/static/index.html build/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
