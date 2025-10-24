@@ -33,16 +33,16 @@ jobs:
 
       - name: Build
         run: |
-          npx vite build --base="/liferay-objects-tree-manager/static/"
+          npx vite build --base="/liferay-objects-tree-manager/build/static/"
 
       - name: Add 404 fallback
         run: |
-          cp -f build/index.html build/404.html
+          cp -f index.html 404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: /
 
   deploy:
     runs-on: ubuntu-latest
