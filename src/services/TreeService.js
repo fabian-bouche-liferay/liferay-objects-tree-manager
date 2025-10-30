@@ -27,6 +27,25 @@ class TreeService {
 
     }
 
+    createTree(name) {
+
+        const body = {};
+        body[this.treeLabel] = name;
+
+        return ApiService.makeCall(this.baseURL + this.treeObjectName, "POST", body).then(data => {
+            return data.id;
+        });
+
+    }    
+
+    deleteTree(treeId) {
+
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId, "DELETE").then(data => {
+            return treeId;
+        });
+
+    } 
+
 }
 
 export default TreeService;

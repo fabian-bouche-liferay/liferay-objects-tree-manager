@@ -1,5 +1,5 @@
 <graph-editor
-    portal-base-url="${themeDisplay.getPortalURL()}"
+    portal-base-url="${themeDisplay.getPortalURL()}/o/c/"
     edge-dpt-base-url="/web/trees/e/edge-edition-dpt/42492/"
     node-dpt-base-url="/web/trees/e/node-edition-dpt/42493/"
 >

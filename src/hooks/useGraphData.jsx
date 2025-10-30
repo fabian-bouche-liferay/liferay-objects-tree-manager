@@ -9,6 +9,13 @@ export const useGraphData = (nodeService, edgeService, fitView) => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
+  const wipeGraphData = useCallback(() => {
+
+    setNodes([]);
+    setEdges([]);
+
+  });
+
   const loadGraphData = useCallback((treeId, setLoading) => {
     setLoading(true);
     nodeService.getNodes(treeId).then(nodeData => {
@@ -46,5 +53,5 @@ export const useGraphData = (nodeService, edgeService, fitView) => {
     });
   }, [nodeService, edgeService, fitView]);
 
-  return { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, loadGraphData };
+  return { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, loadGraphData, wipeGraphData };
 };

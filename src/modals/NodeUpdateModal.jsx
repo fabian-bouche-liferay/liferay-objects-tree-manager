@@ -84,8 +84,10 @@ function NodeUpdateModal(props) {
           <ClayModal.Footer
             last={
               <ClayButton.Group spaced>
+                
                 <ClayButton
                   displayType="danger"
+                  disabled={!nodeRoot}
                   onClick={() => {
                     props.onNodeDeletion();
                     onOpenChange(false);

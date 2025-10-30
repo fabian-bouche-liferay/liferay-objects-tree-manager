@@ -10,6 +10,8 @@ import {
 
 import ClayButton from '@clayui/button';
 import CustomNode from './flow-customization/CustomNode';
+import { useTreeCreation } from './hooks/useTreeCreation';
+import { useTreeDeletion } from './hooks/useTreeDeletion';
 import { useTreeSelection } from './hooks/useTreeSelection';
 import { useNodeCreation } from './hooks/useNodeCreation';
 import { useNodeUpdate } from './hooks/useNodeUpdate';
@@ -24,6 +26,8 @@ import EdgeEditionModal from './modals/EdgeEditionModal';
 import NodeCreationModal from './modals/NodeCreationModal';
 import NodeUpdateModal from './modals/NodeUpdateModal';
 import TreeSelectionModal from './modals/TreeSelectionModal';
+import TreeDeletionModal from './modals/TreeDeletionModal';
+import TreeCreationModal from './modals/TreeCreationModal';
 
 const nodeTypes = { custom: CustomNode };
 
@@ -32,13 +36,15 @@ function GraphEditor(props) {
     const { fitView } = useReactFlow();
     const [ loading, setLoading ] = useState(false);
     const [ treeId, setTreeId ] = useState();
-    const { trees, loadTreeData } = useTreeData(props.treeService);
-    const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, loadGraphData } = useGraphData(props.nodeService, props.edgeService, fitView);
+    const { trees, loadTreeData } = useTreeData(props.treeService, setTreeId);
+    const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, loadGraphData, wipeGraphData } = useGraphData(props.nodeService, props.edgeService, fitView);
     const { onConnect, handleEdgeCreationModalClose, handleEdgeCreation, edgeCreationModalOpen } = useEdgeCreation(props.edgeService, setEdges, treeId);
     const { onConnectEnd, handleNodeCreationModalClose, handleNodeCreation, nodeCreationModalOpen } = useNodeCreation(props.nodeService, props.edgeService, setNodes, setEdges, treeId);
     const { onNodeClick, onNodeDragStop, handleNodeUpdateModalClose, handleNodeUpdate, handleNodeDelete, handleNodeSetAsStart, nodeUpdateModalOpen, currentNode } = useNodeUpdate(props.nodeService, nodes, setNodes);
     const { onEdgeClick, handleEdgeEditionModalClose, handleEdgeLabelChange, handleEdgeDelete, edgeEditionModalOpen, currentEdge } = useEdgeUpdate(props.edgeService, edges, setEdges);
     const { onSelectTree, handleTreeSelectionModalClose, handleTreeSelection, treeSelectionModalOpen } = useTreeSelection(setTreeId);
+    const { onCreateTree, handleTreeCreationModalClose, handleTreeCreation, treeCreationModalOpen } = useTreeCreation(props.treeService, props.nodeService, loadTreeData, loadGraphData, setLoading);
+    const { onDeleteTree, handleTreeDeletionModalClose, handleTreeDeletion, treeDeletionModalOpen } = useTreeDeletion(props.treeService, loadTreeData);
 
     const onLayout = useCallback(
       (direction) => {
@@ -55,7 +61,7 @@ function GraphEditor(props) {
     );
 
     useEffect(() => {
-      loadTreeData(props.treeService);
+      loadTreeData();
       if(props.treeId != null) {
         setTreeId(props.treeId);
       }
@@ -64,6 +70,8 @@ function GraphEditor(props) {
     useEffect(() => {
       if(treeId != null) {
         loadGraphData(treeId, setLoading);
+      } else {
+        wipeGraphData();
       }
     }, [treeId]);
     
@@ -99,12 +107,21 @@ function GraphEditor(props) {
                           >
                             Refresh Data
                           </ClayButton>
+
                           <ClayButton 
                             displayType="secondary"
                             onClick={() => onLayout('TB')}
                           >
                             Auto Layout
                           </ClayButton>
+
+                          <ClayButton 
+                            displayType="danger"
+                            onClick={onDeleteTree}
+                          >
+                            Delete Tree
+                          </ClayButton>
+
                         </> 
                       :
                         <></>
@@ -115,6 +132,12 @@ function GraphEditor(props) {
                       >
                         Select Tree
                       </ClayButton>
+                      <ClayButton 
+                        displayType="primary"
+                        onClick={onCreateTree}
+                      >
+                        Create Tree
+                      </ClayButton>                      
                     </ClayButton.Group>                      
                   </Panel>
                 </ReactFlow>
@@ -130,6 +153,16 @@ function GraphEditor(props) {
               treeId={treeId}
               onClose={handleTreeSelectionModalClose}
               onTreeSelection={handleTreeSelection} />                
+            <TreeCreationModal
+              open={treeCreationModalOpen && !loading}
+              onClose={handleTreeCreationModalClose}
+              onTreeCreation={handleTreeCreation} />                 
+            <TreeDeletionModal
+              open={treeDeletionModalOpen && !loading}
+              onClose={handleTreeDeletionModalClose}
+              treeId={treeId}
+              treeLabel={(trees != null && treeId != null) ? trees.find(tree => tree.id == treeId).treeLabel : ''}
+              onTreeDeletion={handleTreeDeletion} />                 
             <EdgeCreationModal
               open={edgeCreationModalOpen && !loading}
               onClose={handleEdgeCreationModalClose}

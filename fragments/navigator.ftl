@@ -1,5 +1,5 @@
 <graph-navigator 
-    portal-base-url="${themeDisplay.getPortalURL()}"
+    portal-base-url="${themeDisplay.getPortalURL()}/o/c/"
     edge-dpt-base-url="/web/trees/e/"
     node-dpt-base-url="/web/trees/e/node-display-dpt/42493/"
     tree-erc="e8d5445a-5be9-fb83-77ac-6d20937d8899"

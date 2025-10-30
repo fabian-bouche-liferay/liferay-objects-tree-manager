@@ -40,7 +40,7 @@ function TreeSelectionModal(props) {
           <ClayModal.Header>Select tree</ClayModal.Header>
           <ClayModal.Body>
             <ClayForm.Group>
-              <label htmlFor="nodeTitle">Node Title</label>
+              <label htmlFor="treeSelect">Tree Title</label>
               <ClaySelect aria-label="Select Tree" id="treeSelect" value={treeId} onChange={handleTreeChange}>
                 {trees.map(item => (
                   <ClaySelect.Option
