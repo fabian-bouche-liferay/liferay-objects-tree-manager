@@ -87,7 +87,7 @@ function NodeUpdateModal(props) {
                 
                 <ClayButton
                   displayType="danger"
-                  disabled={!nodeRoot}
+                  disabled={nodeRoot}
                   onClick={() => {
                     props.onNodeDeletion();
                     onOpenChange(false);
