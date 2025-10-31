@@ -15,7 +15,7 @@ class EdgeService {
 
     getEdges(treeId) {
 
-        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeEdgesRelationName + "/?fields=id%2C" + this.edgeLabel + "%2C" + this.targetRelationId + "%2C" + this.sourceRelationId, "GET").then(data => {
+        return ApiService.makeCall(this.baseURL + this.treeObjectName + "/" + treeId + "/" + this.treeEdgesRelationName + "/?pageSize=500&fields=id%2C" + this.edgeLabel + "%2C" + this.targetRelationId + "%2C" + this.sourceRelationId, "GET").then(data => {
             return data.items.map(item => ({
                 id: item.id,
                 sourceNodeId: item[this.sourceRelationId],
